@@ -39,9 +39,12 @@ const perPage = 10;
 ***/
 
 const displayPage = (list, page) => {
+  /*if we start our buttons with "button 1" then the first start index is 1,
+  but remember that the first li element is at index 0.*/
   const startIndex = (page * perPage) - perPage;
   const endIndex = page * perPage;
-  for (let i = 0; i < perPage; i++) {
+  //should i be < perPage, or <= ?
+  for (let i = 0; i <= perPage; i++) {
     let li = list[i];
     if(i >= startIndex && i <= endIndex) {
     li.style.display = '';
