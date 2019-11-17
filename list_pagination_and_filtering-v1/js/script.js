@@ -38,26 +38,75 @@ const perPage = 10;
        "invoke" the function
 ***/
 
-const displayPage = (list, page) => {
+const showPage = (list, page) => {
   /*if we start our buttons with "button 1" then the first start index is 1,
   but remember that the first li element is at index 0.*/
   const startIndex = (page * perPage) - perPage;
   const endIndex = page * perPage;
-  //should i be < perPage, or <= ?
-  for (let i = 0; i <= perPage; i++) {
+  for (let i = 0; i < list.length; i++) {
     let li = list[i];
-    if(i >= startIndex && i <= endIndex) {
-    li.style.display = '';
+    if(i >= startIndex && i < endIndex) {
+      li.style.display = '';
   } else {
-    li.style.display = 'none';
+      li.style.display = 'none';
     }
   }
 }
-displayPage(studentList, 1);
+//test of showPage Function
+showPage(studentList, 1);
 /***
    Create the `appendPageLinks function` to generate, append, and add
    functionality to the pagination buttons.
 ***/
+
+
+const appendPageLinks = (list) => {
+  // This likely needs to be Math.ceil(list.length/perPage);
+  let maxPages = Math.ceil(list.length / perPage);
+  let pageDiv = document.querySelector('.page');
+  let paginationDiv = document.createElement('div');
+  paginationDiv.className = '.pagination';
+  let ul = document.createElement('ul');
+  pageDiv.appendChild(paginationDiv);
+  paginationDiv.appendChild(ul);
+
+
+  /* Does i need to be < or <= numOfPages, and does numOfPages need
+      to be rounded up?
+  */
+  for(i=0; i<= maxPages; i++) {
+    let li = document.createElement('li');
+    ul.appendChild(li);
+    let anchor = document.createElement('a');
+    ul.appendChild(anchor);
+    li.textContent = "" + i +"";
+    anchor.textContent = "" + i + "";
+
+
+    /* add evnet listener to each anchor tag, and each anchor tag should have
+    their text content = the a page number.  In this case, there should be 6
+    buttons
+    */
+
+
+  }
+}
+
+appendPageLinks(studentList);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
