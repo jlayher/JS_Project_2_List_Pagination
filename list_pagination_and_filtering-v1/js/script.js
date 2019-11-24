@@ -8,7 +8,6 @@ const searchDiv = document.createElement('div');
 const searchInput = document.createElement('input');
 const searchButton = document.createElement('button');
 
-
 /* The Function showPage creates a list of students, using the arguments
 list (representing the student list items contained in the gloabl variable
 above) and a page number as the 2nd argument.  This creates a "page" of up to 10
@@ -31,8 +30,6 @@ that stores up to 10 list items (student-items) per page, and creates anchor
 elements for the number of pages needed to access the list items in sets of 10.
 */
 const appendPageLinks = (list) => {
-
-  //do I need Math.ceil?
   let maxPages = Math.ceil(list.length / perPage);
   let pageDiv = document.querySelector('.page');
   let paginationDiv = document.createElement('div');
@@ -40,39 +37,31 @@ const appendPageLinks = (list) => {
   pageDiv.appendChild(paginationDiv);
   let ul = document.createElement('ul');
   paginationDiv.appendChild(ul);
-  //attempt to remove/prevent duplicate pagination appendPageLinks when searching
-  const paginationDivRemove = document.querySelector('.pagination');
-  if (document.contains(paginationDivRemove)){
-    paginationDivRemove.remove();
-  }
   /*This loop creates and appends the links that will function as our "page number"
     when we call showPage later in this function*/
-  for(i=0; i< maxPages; i++) {
+  for(let i=0; i< maxPages; i++) {
     let li = document.createElement('li');
     ul.appendChild(li);
     let a = document.createElement('a');
-    li.appendChild(a);
     a.textContent = i+1;
     a.href= "#";
+    li.appendChild(a);
     let firstAnchor = document.querySelector('a');
     firstAnchor.className = ".active";
     let anchorList = document.querySelectorAll('a');
     for (let j = 0; j < anchorList.length; j++) {
       a.addEventListener('click', (event) => {
-        showPage(list, event.target.textContent);
-        for (let k = 0; k <= anchorList.length; k++) {
-          //attempt at solving anchorList being undefined
-          let anchorList2 = document.querySelectorAll('a');
-          anchorList2[k].className = 'none';
+        for (let k = 0; k<anchorList; k++){
+          anchorList[k].classList.remove('active');
         }
-      event.target.className = '.active';
+        showPage(list, event.target.textContent);
+        event.target.className = '.active';
       });
     }
   }
 }
 
 // create search component
-
 const createSearch = () => {
   headerDiv.appendChild(searchDiv);
   searchDiv.className = "student-search";
@@ -82,35 +71,36 @@ const createSearch = () => {
   searchButton.textContent = "Search For Student!";
 }
 
+//IDK this isnt helping
+const removeLinks = () => {
+  const ul = document.querySelector(ul);
+  const parentUl = ul.parentNode;
+  parentUl.removeChild(ul);
+}
+
 // create search array and run the search.  Call showPage and appendPageLinks
 const searchStudents = (input, list) => {
   let searchList = [];
-  //attempt to remove repeating li and anchor tags
-  //Removes the "No Results" message when performing search
   const noResults1 = document.querySelector('.no-results');
   if (document.contains(noResults1)){
     noResults1.remove();
   }
-  //should i be < or <= ?
   for (let i = 0; i < list.length; i++) {
-    // may not be needed, but preemptively removing the display of all list items before searching
     list[i].style.display = 'none';
     if(list[i].textContent.toLowerCase().includes(searchInput.value.toLowerCase())){
       searchList.push(list[i]);
     }
   }
     if (searchList.length === 0) {
-      /*do I need to create a new li, or attach this to the page div, or
-      the student h2?*/
       let noResults = document.createElement('li');
       noResults.className = "no-results";
       searchDiv.appendChild(noResults);
       noResults.textContent = "No Results";
     }
   showPage(searchList, 1);
+  removeLinks();
   appendPageLinks(searchList);
 };
-
 
 // Add keyup event listener for searchInput, and run searchStudents
 searchInput.addEventListener('keyup', (event) => {
@@ -125,28 +115,7 @@ searchButton.addEventListener('click', (event) => {
   searchStudents(input, studentList);
 });
 
-
 // Calling all Functions
-createSearch();
 showPage(studentList, 1);
 appendPageLinks(studentList);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Remember to delete the comments that came with this file, and replace them with your own code comments.
+createSearch();
