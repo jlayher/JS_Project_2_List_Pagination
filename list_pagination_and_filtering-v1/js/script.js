@@ -51,10 +51,11 @@ const appendPageLinks = (list) => {
     let anchorList = document.querySelectorAll('a');
     for (let j = 0; j < anchorList.length; j++) {
       a.addEventListener('click', (event) => {
-        for (let k = 0; k<anchorList; k++){
-          anchorList[k].classList.remove('active');
-        }
+        let anchorList2 = document.querySelectorAll('a');
         showPage(list, event.target.textContent);
+          for (let k = 0; k<anchorList; k++){
+            anchorList2[k].classList.remove('active');
+        }
         event.target.className = '.active';
       });
     }
