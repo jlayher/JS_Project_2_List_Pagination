@@ -72,7 +72,11 @@ const createSearch = () => {
   searchButton.textContent = "Search For Student!";
 }
 
-//IDK this isnt helping
+/*  This code is removing the extra pagination links from appearing, but
+it generates an error, due to the ul existing inside another function.  This
+doesn't help solve the issue of the number of pagination buttons changing to
+reflect the number of items in the search.
+*/
 const removeLinks = () => {
   const ul = document.querySelector(ul);
   const parentUl = ul.parentNode;
@@ -82,22 +86,29 @@ const removeLinks = () => {
 // create search array and run the search.  Call showPage and appendPageLinks
 const searchStudents = (input, list) => {
   let searchList = [];
+  //this removes the "No Results" message from the page
   const noResults1 = document.querySelector('.no-results');
   if (document.contains(noResults1)){
     noResults1.remove();
   }
+  /*This code loops through the student list items, and adds items that match
+  the searchInput value to a new array.
+  */
   for (let i = 0; i < list.length; i++) {
     list[i].style.display = 'none';
     if(list[i].textContent.toLowerCase().includes(searchInput.value.toLowerCase())){
       searchList.push(list[i]);
     }
   }
+    /*This code generates and displays a "No Results" message, when the search
+    doesn't return any matches*/
     if (searchList.length === 0) {
       let noResults = document.createElement('li');
       noResults.className = "no-results";
       searchDiv.appendChild(noResults);
       noResults.textContent = "No Results";
     }
+    //calling functions 
   showPage(searchList, 1);
   removeLinks();
   appendPageLinks(searchList);
