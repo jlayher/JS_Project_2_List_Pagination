@@ -72,16 +72,23 @@ const createSearch = () => {
   searchButton.textContent = "Search For Student!";
 }
 
+/*REMOVING THE CODE BELOW CLARIFIED THE ISSUE!  So without the function removeLinks,
+The search function adds the appropriate number of pagination links, based on
+the search results, but it does not remove the old pagination links.  With the
+removeLinks function active, the number of pagination links is always 6.
+*/
 /*  This code is removing the extra pagination links from appearing, but
 it generates an error, due to the ul existing inside another function.  This
 doesn't help solve the issue of the number of pagination buttons changing to
 reflect the number of items in the search.
 */
+/*
 const removeLinks = () => {
-  const ul = document.querySelector(ul);
-  const parentUl = ul.parentNode;
+  let ul = document.querySelector(ul);
+  let parentUl = ul.parentNode;
   parentUl.removeChild(ul);
 }
+*/
 
 // create search array and run the search.  Call showPage and appendPageLinks
 const searchStudents = (input, list) => {
@@ -108,9 +115,9 @@ const searchStudents = (input, list) => {
       searchDiv.appendChild(noResults);
       noResults.textContent = "No Results";
     }
-    //calling functions 
+    //calling functions
   showPage(searchList, 1);
-  removeLinks();
+  //removeLinks();
   appendPageLinks(searchList);
 };
 
