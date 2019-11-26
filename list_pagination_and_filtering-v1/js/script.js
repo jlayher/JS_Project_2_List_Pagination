@@ -1,4 +1,8 @@
-
+/*  John Layher's List Pagination and Filtering Project (Full Stack JS Project 2)
+I am attempting to earn the Exceeds Expectations Grade for this project,
+and I would like my submission to be rejected if I do not meet the qualifications
+for the Exceeds Expectations Grade.
+*/
 // Global Variables Created
 const studentList = document.querySelectorAll('.student-item');
 const perPage = 10;
@@ -8,10 +12,8 @@ const searchDiv = document.createElement('div');
 const searchInput = document.createElement('input');
 const searchButton = document.createElement('button');
 
-/* The Function showPage creates a list of students, using the arguments
-list (representing the student list items contained in the gloabl variable
-above) and a page number as the 2nd argument.  This creates a "page" of up to 10
-student list items. */
+/* The Function showPage displays a page of up to 10 students, using the arguments
+"list" and a page number as the 2nd argument.*/
 const showPage = (list, page) => {
   const startIndex = (page * perPage) - perPage;
   const endIndex = page * perPage;
@@ -26,19 +28,27 @@ const showPage = (list, page) => {
 }
 
 /* The Fucntion appendPageLinks creates a div(pagination), and a ul element
-that stores up to 10 list items (student-items) per page, and creates anchor
+that holds up to 10 list items (student-items) per page, and creates anchor
 elements for the number of pages needed to access the list items in sets of 10.
 */
 const appendPageLinks = (list) => {
+  /*check to see if pagination links already exist, and if so,
+  remove them, before the function creates a new set of pagination links*/
+  let oldDiv = document.querySelector('.pagination');
+  if (oldDiv !== null) {
+    oldDiv.remove();
+  }
+  /*this code selects, creates, adds classes for styling, and appends the elements
+  needed for adding our pagination links*/
   let maxPages = Math.ceil(list.length / perPage);
   let pageDiv = document.querySelector('.page');
   let paginationDiv = document.createElement('div');
-  paginationDiv.className = '.pagination';
+  paginationDiv.className = 'pagination';
   pageDiv.appendChild(paginationDiv);
   let ul = document.createElement('ul');
   paginationDiv.appendChild(ul);
   /*This loop creates and appends the links that will function as our "page number"
-    when we call showPage later in this function*/
+    when we call showPage*/
   for(let i=0; i< maxPages; i++) {
     let li = document.createElement('li');
     ul.appendChild(li);
@@ -46,23 +56,29 @@ const appendPageLinks = (list) => {
     a.textContent = i+1;
     a.href= "#";
     li.appendChild(a);
+    /* The first anchor is set to active, letting the user know the
+    current page of the student list is being displayed.*/
     let firstAnchor = document.querySelector('a');
-    firstAnchor.className = ".active";
-    let anchorList = document.querySelectorAll('a');
-    for (let j = 0; j < anchorList.length; j++) {
-      a.addEventListener('click', (event) => {
-        let anchorList2 = document.querySelectorAll('a');
-        showPage(list, event.target.textContent);
-          for (let k = 0; k<anchorList; k++){
-            anchorList2[k].classList.remove('active');
-        }
-        event.target.className = '.active';
-      });
-    }
+    firstAnchor.className = "active";
+    /* A click event listener is added to the anchor tags.  When a link is clicked
+    the function showPage is called using the student list and the link's text
+    content as arguments.*/
+    a.addEventListener('click', (event) => {
+      showPage(list, event.target.textContent);
+      let anchorList = document.querySelectorAll('a');
+      /*This loop iterates through the list of anchor tags, and removes the
+      active class from the tags, so that they are not highlighted.*/
+      for (let k = 0; k<anchorList.length; k++){
+        anchorList[k].classList.remove('active');
+      }
+      /* the link representing the currently displayed page is selected, and
+      the active class is applied*/
+      event.target.className = 'active';
+    });
   }
 }
 
-// create search component
+/* The createSearch function creates the search bar, and adds some styles to them.*/
 const createSearch = () => {
   headerDiv.appendChild(searchDiv);
   searchDiv.className = "student-search";
@@ -72,35 +88,17 @@ const createSearch = () => {
   searchButton.textContent = "Search For Student!";
 }
 
-/*REMOVING THE CODE BELOW CLARIFIED THE ISSUE!  So without the function removeLinks,
-The search function adds the appropriate number of pagination links, based on
-the search results, but it does not remove the old pagination links.  With the
-removeLinks function active, the number of pagination links is always 6.
-*/
-/*  This code is removing the extra pagination links from appearing, but
-it generates an error, due to the ul existing inside another function.  This
-doesn't help solve the issue of the number of pagination buttons changing to
-reflect the number of items in the search.
-*/
-/*
-const removeLinks = () => {
-  let ul = document.querySelector(ul);
-  let parentUl = ul.parentNode;
-  parentUl.removeChild(ul);
-}
-*/
-
-// create search array and run the search.  Call showPage and appendPageLinks
+/* The function searchStudents takes the user's search input, and adds any mathcing
+results to a new array, to be used as an argument later.*/
 const searchStudents = (input, list) => {
   let searchList = [];
-  //this removes the "No Results" message from the page
+  //this removes the "No Results" message from the page if it already exists
   const noResults1 = document.querySelector('.no-results');
   if (document.contains(noResults1)){
     noResults1.remove();
   }
   /*This code loops through the student list items, and adds items that match
-  the searchInput value to a new array.
-  */
+  the searchInput value to the searchList array.*/
   for (let i = 0; i < list.length; i++) {
     list[i].style.display = 'none';
     if(list[i].textContent.toLowerCase().includes(searchInput.value.toLowerCase())){
@@ -117,7 +115,6 @@ const searchStudents = (input, list) => {
     }
     //calling functions
   showPage(searchList, 1);
-  //removeLinks();
   appendPageLinks(searchList);
 };
 
